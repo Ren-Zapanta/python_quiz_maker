@@ -1,0 +1,21 @@
+Question: Who is taylor swift 
+1. a singer
+2. a chef
+3. an actress
+4. a soldier
+Correct answer: 1 
+-----
+Question: What am I feeling 
+1. happy
+2. sad
+3. depressed
+4. idk
+Correct answer: 4 
+-----
+Question: What is a gundam 
+1. a toy
+2. a robot
+3. idk
+4. a food
+Correct answer: 2 
+-----
