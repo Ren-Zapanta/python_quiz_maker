@@ -1,2 +1,0 @@
-import sys #ini-import lang po netoh ung sys module ng Python itself
-from PyQt6.QtWidgets import QApplication, QWidget #Ini-import lang po nito ung QApplication and QWidget; both of which are very essential for the very window/app na ir-run po
