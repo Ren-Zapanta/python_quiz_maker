@@ -1,18 +1,19 @@
 import pygame ##mport the pygame library to create the graphical interface
 pygame.init() #Initialize all the Pygame modules
 
-intro_stage = "init" 
-intro_texts = {
-    "init": "System Initializing...",
-    "waiting_key": "Press any key to proceed."
+intro_stage = "init" #initializes the state of the intro sequence as "init"
+intro_texts = { #Dictionary to hold the intro messages for both stages
+    "init": "System Initializing...", #The first string to be displayed
+    "waiting_key": "Press any key to proceed." #Second message. Displays after three seconds
 }
+
+#Handles the typewriter animation
 typed_intro_text = ""
 intro_index = 0
 intro_last_type_time = pygame.time.get_ticks()
 intro_typewriter_delay = 45 
 
-intro_start_time = pygame.time.get_ticks()
-
+intro_start_time = pygame.time.get_ticks() #Records the starting time of the whole intro
 
 pygame.key.set_repeat(400, 30) #Allows keys functionality when held down, instead of pressing it repeatedly
 
@@ -50,6 +51,8 @@ quiz_data = {
 
 while run:
 
+#INTRO SEQUENCE
+
     if intro_stage != "done": #Verifies if the intro-string sequence has not finished yet
         screen.fill((0, 0, 0)) #This fills the screen with the black background
 
@@ -84,8 +87,7 @@ while run:
 
         continue
             
-            
-        
+#MAIN PROGRAM LOGIC
 
     for event in pygame.event.get(): #Check for events like key presses or window closing
         if event.type == pygame.QUIT:  #Verifies if user clicked the close window
@@ -104,6 +106,7 @@ while run:
                     prompt_index = 0 #restarts typing the prompt
                     input_stage = "choice_A" #this updates the current stage of the program
 
+    #CHOICES FOR THE QUESTION INPUT
     #The codes for choices A - D are pretty much just the same, hence the absence of comment lines
 
                 #For choice A
@@ -163,6 +166,8 @@ while run:
                         "answer": ""
                     }
 
+#ASKS IF THE USER WANTS TO INPUT A QUESTION AGAIN
+
                 elif input_stage == "confirm_continue":
                     if user_text.lower() == "y": #If the user says yes
                         user_text = ""  #Clears the input space
@@ -183,7 +188,7 @@ while run:
                         prompt_text = "Invalid input. Please type Y or N:"
                         typed_prompt = ""
                         prompt_index = 0
-                        
+
             else:
                 user_text += event.unicode 
         
@@ -198,7 +203,7 @@ while run:
 
 
 
-    typed_surface = base_font.render(typed_prompt, True, ('green')) #this renders the text freen
+    typed_surface = base_font.render(typed_prompt, True, ('green')) #this renders the text Green
     screen.blit(typed_surface, (100, 250)) #This assigns x and y coordinates to the prompt; placing it right above the input line
 
 
