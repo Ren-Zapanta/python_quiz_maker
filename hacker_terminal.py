@@ -51,6 +51,42 @@ while run:
                     typed_prompt = "" #resets the typewriter effect
                     prompt_index = 0 #restarts typing the prompt
                     input_stage = "choice_A" #this updates the current stage of the program
+
+                #For choice A
+                elif input_stage == "choice_A":
+                    quiz_data["choices"]["A"] = user_text  # Save choice A
+                    user_text = ""
+                    prompt_text = "Enter choice B:"
+                    typed_prompt = ""
+                    prompt_index = 0
+                    input_stage = "choice_B"
+
+                #For choice B
+                elif input_stage == "choice_B":
+                    quiz_data["choices"]["B"] = user_text  
+                    user_text = ""
+                    prompt_text = "Enter choice C:"
+                    typed_prompt = ""
+                    prompt_index = 0
+                    input_stage = "choice_C"
+
+                #For choice C
+                elif input_stage == "choice_C":
+                    quiz_data["choices"]["C"] = user_text  
+                    user_text = ""
+                    prompt_text = "Enter choice D:"
+                    typed_prompt = ""
+                    prompt_index = 0
+                    input_stage = "choice_D"
+
+                #For choice D
+                elif input_stage == "choice_D":
+                    quiz_data["choices"]["D"] = user_text  
+                    user_text = ""
+                    prompt_text = "Enter the correct answer (A, B, C, or D): "
+                    typed_prompt = ""
+                    prompt_index = 0
+                    input_stage = "answer"
             else:
                 user_text += event.unicode 
         
