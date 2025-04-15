@@ -52,6 +52,8 @@ while run:
                     prompt_index = 0 #restarts typing the prompt
                     input_stage = "choice_A" #this updates the current stage of the program
 
+    #The codes for choices A - D are pretty much just the same, hence the absence of comment lines
+
                 #For choice A
                 elif input_stage == "choice_A":
                     quiz_data["choices"]["A"] = user_text  # Save choice A
@@ -87,6 +89,52 @@ while run:
                     typed_prompt = ""
                     prompt_index = 0
                     input_stage = "answer"
+
+                #For correct answer
+                elif input_stage == "answer":
+                    quiz_data["answer"] = user_text.upper() #sets user_text to uppercase
+
+                    with open(r"C:\Users\renza\OneDrive\Documents\School\College\2nd Semester\Object Oriented Programming\Programs\python_quiz_maker\quiz.txt", "a") as file: #opens the file in append mode where the data will be saved at.
+                        file.write("Question: " + quiz_data["question"] + "\n") #This will write the question to the file
+                        for key in ["A", "B", "C", "D"]: #This will iterate through each of the choices
+                            file.write(f"{key}. {quiz_data['choices'][key]}\n") #Formats the choice
+                        file.write("Answer: " + quiz_data["answer"] + "\n\n") #Writes the correct answer on the file and adds a spacing for better readability between each question
+
+                    user_text = "" 
+                    prompt_text = "Do you want to input another question? (Y/N): " #Asks the user if whether or not they want to input another question
+                    typed_prompt = ""
+                    prompt_index = 0
+                    input_stage = "confirm_continue"
+                    quiz_data = {
+                        "question": "",
+                        "choices": {"A": "", "B": "", "C": "", "D": ""},
+                        "answer": ""
+                    }
+
+                elif input_stage == "confirm_continue":
+                    if user_text.lower() == "y": #If the user says yes
+                        user_text = ""  #Clears the input space
+                        prompt_text = "Please enter a question: "  #Resets the prompt back to the question input
+                        typed_prompt = ""  #Resets the typewriter effect
+                        prompt_index = 0  #reset the typewriter index
+                        input_stage = "question"  #If the user says yes, it goes baack to entering a question
+                        quiz_data = {  #Clears the old data for new input
+                            "question": "",
+                            "choices": {"A": "", "B": "", "C": "", "D": ""},
+                            "answer": ""
+                    }
+                    elif user_text.lower() == "n":  #if the user says no
+                        run = False  #the program will terminate
+                    else:
+                        # If user input is not valid, prompt again
+                        user_text = ""
+                        prompt_text = "Invalid input. Please type Y or N:"
+                        typed_prompt = ""
+                        prompt_index = 0
+
+
+
+                
             else:
                 user_text += event.unicode 
         
