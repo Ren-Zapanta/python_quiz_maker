@@ -11,6 +11,9 @@ base_font = pygame.font.SysFont("consolas", 27) #THe font that the program will 
 
 user_text = '' #This will contain the user's input
 
+prompt_text = "Please enter a question: "
+prompt_surface = base_font.render(prompt_text, True, ('green'))
+
 
 screen = pygame.display.set_mode((screen_width, screen_height)) #Creates the window using the initialized dimensions
 pygame.display.set_caption("Hacker Terminal") #Name of the window
@@ -29,10 +32,12 @@ while run:
                 user_text = user_text[:-1] #Grants the backspace key functionality
             else:
                 user_text += event.unicode 
-        
-
-       
+           
     screen.fill((0, 0, 0)) #clears the screen with black color
+
+    screen.blit(prompt_surface, (100, 250))
+
+
 
     #These are responsible for rendering what the user has typed on the screen
     text_surface = base_font.render(user_text, True, (0, 255, 0))
