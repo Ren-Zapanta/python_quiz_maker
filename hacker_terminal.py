@@ -26,6 +26,15 @@ run = True #control variable that keeps the window running
 
 clock = pygame.time.Clock() #keeps track of time in-between frames
 
+input_stage = "question" #determines what the user is typing for (i.e, question, choices)
+
+#This will hold the inputs (e.g, questions, choices, andthe correct answer)
+quiz_data = {
+    "question": "",
+    "choices": {"A": "", "B": "", "C": "", "D": ""},
+    "answer": ""
+}
+
 while run:
 
     for event in pygame.event.get(): #Check for events like key presses or window closing
@@ -34,8 +43,17 @@ while run:
         if event.type == pygame.KEYDOWN: #Lets the user type their own string on the generated terminal itself
             if event.key == pygame.K_BACKSPACE: #Gives function to a specific key
                 user_text = user_text[:-1] #Grants the backspace key functionality
+            elif event.key == pygame.K_RETURN: #If the user presses enter
+                if input_stage == "question":
+                    quiz_data["question"] = user_text #This saves the question input
+                    user_text = "" #resets the user input
+                    prompt_text = "Enter choice A: " #Renders a new prompt; one asking for a choice for the corresponding question
+                    typed_prompt = "" #resets the typewriter effect
+                    prompt_index = 0 #restarts typing the prompt
+                    input_stage = "choice_A" #this updates the current stage of the program
             else:
                 user_text += event.unicode 
+        
            
     screen.fill((0, 0, 0)) #clears the screen with black color
 
