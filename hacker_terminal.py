@@ -1,6 +1,19 @@
 import pygame ##mport the pygame library to create the graphical interface
 pygame.init() #Initialize all the Pygame modules
 
+intro_stage = "init" 
+intro_texts = {
+    "init": "System Initializing...",
+    "waiting_key": "Press any key to proceed."
+}
+typed_intro_text = ""
+intro_index = 0
+intro_last_type_time = pygame.time.get_ticks()
+intro_typewriter_delay = 45 
+
+intro_start_time = pygame.time.get_ticks()
+
+
 pygame.key.set_repeat(400, 30) #Allows keys functionality when held down, instead of pressing it repeatedly
 
 #Sets the window's dimensions
@@ -37,12 +50,51 @@ quiz_data = {
 
 while run:
 
+    if intro_stage != "done": #Verifies if the intro-string sequence has not finished yet
+        screen.fill((0, 0, 0)) #This fills the screen with the black background
+
+        current_time = pygame.time.get_ticks() #Fetches the time elpased since the program initiates
+        elapsed_time = current_time - intro_start_time #Calculates how much time has passed since the intro seqquence started
+
+        
+        current_intro = intro_texts[intro_stage] #gets the current string to be typed on the screen
+
+        if intro_index < len(current_intro) and current_time - intro_last_type_time > intro_typewriter_delay:
+            typed_intro_text += current_intro[intro_index] #This adds the next characcter to the text being displayed on the terminal window
+            intro_index += 1 #Proceeds to the next character in the string
+            intro_last_type_time = current_time #updates the last time that a character was typed
+
+        #Handles the rendering of the text and its color
+        intro_surface = base_font.render(typed_intro_text, True, (0, 255, 0))
+        screen.blit(intro_surface, (100, 300))
+
+        if intro_stage == "init" and elapsed_time > 3000 and intro_index >= len(current_intro):
+            intro_stage = "waiting_key" #updates the stage to wait for any key input
+            typed_intro_text = "" #resets the text for the new message
+            intro_index = 0 #This resets the character index
+            intro_last_type_time = current_time #This is responsible for resetting the time tracker for typing
+
+        pygame.display.update()
+
+        for event in pygame.event.get(): #this loops throuhgh key inputs
+            if event.type == pygame.QUIT: #If the user clicks the X button to close the window
+                run = False #Terminates the program
+            elif event.type == pygame.KEYDOWN and intro_stage == "waiting_key": #Confition when the program reads a key input
+                intro_stage = "done" #Moves onto the main interface
+
+        continue
+            
+            
+        
+
     for event in pygame.event.get(): #Check for events like key presses or window closing
         if event.type == pygame.QUIT:  #Verifies if user clicked the close window
             run = False #Closese the window if the user clicks the X button
+
         if event.type == pygame.KEYDOWN: #Lets the user type their own string on the generated terminal itself
             if event.key == pygame.K_BACKSPACE: #Gives function to a specific key
                 user_text = user_text[:-1] #Grants the backspace key functionality
+
             elif event.key == pygame.K_RETURN: #If the user presses enter
                 if input_stage == "question":
                     quiz_data["question"] = user_text #This saves the question input
@@ -131,10 +183,7 @@ while run:
                         prompt_text = "Invalid input. Please type Y or N:"
                         typed_prompt = ""
                         prompt_index = 0
-
-
-
-                
+                        
             else:
                 user_text += event.unicode 
         
