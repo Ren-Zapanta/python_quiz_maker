@@ -30,7 +30,7 @@ while True:
             file.write(f"{i}. {choice}\n") #This writes the choices of a given question on the text file with the assigned number up front
         file.write(f"Correct answer: {correct_choice} \n") #This writes the correct answer for the given question
         file.write("-----\n") #Separates questions (if multiple) for better readability
-        
+
 
 #This parts is responsible for looping back to the original prompt for if the user would like to input another question and a set of answers
 

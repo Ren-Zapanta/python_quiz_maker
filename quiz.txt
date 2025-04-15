@@ -19,3 +19,17 @@ Question: What is a gundam
 4. a food
 Correct answer: 2 
 -----
+Question: & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py" 
+1. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+2. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+3. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+4. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+Correct answer: 4 
+-----
+Question: & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py" 
+1. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+2. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+3. & C:/Users/renza/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/renza/OneDrive/Documents/School/College/2nd Semester/Object Oriented Programming/Programs/PRACTICE/matrix_quiz.py"
+4. 4
+Correct answer: 4 
+-----
