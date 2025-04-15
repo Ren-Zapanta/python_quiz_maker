@@ -11,8 +11,12 @@ base_font = pygame.font.SysFont("consolas", 27) #THe font that the program will 
 
 user_text = '' #This will contain the user's input
 
-prompt_text = "Please enter a question: "
-prompt_surface = base_font.render(prompt_text, True, ('green'))
+
+prompt_text = "Please enter a question: " #Prompt that would ask the user to enter a question
+typed_prompt = '' #This is where the program will type the prompt, letter by letter.
+prompt_index = 0 #This is the index of the next character to type
+typewriter_delay = 45 #Delay between each character, set in milliseconds
+last_type_time = pygame.time.get_ticks() #The last time that a character was added
 
 
 screen = pygame.display.set_mode((screen_width, screen_height)) #Creates the window using the initialized dimensions
@@ -35,7 +39,16 @@ while run:
            
     screen.fill((0, 0, 0)) #clears the screen with black color
 
-    screen.blit(prompt_surface, (100, 250))
+    current_time = pygame.time.get_ticks() #gets the current time since the program was started
+    if prompt_index < len(prompt_text) and current_time - last_type_time > typewriter_delay:
+        typed_prompt += prompt_text[prompt_index] #This adds the next character to the display
+        prompt_index += 1 #After having added the last character, this moves onto the next
+        last_type_time = current_time #updates the current_time variable
+
+
+
+    typed_surface = base_font.render(typed_prompt, True, ('green')) #this renders the text freen
+    screen.blit(typed_surface, (100, 250)) #This assigns x and y coordinates to the prompt; placing it right above the input line
 
 
 
