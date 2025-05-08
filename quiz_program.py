@@ -11,6 +11,8 @@ screen_width = 1200
 screen_height = 720
 pygame.display.set_caption("Hacker Terminal") #name of the window
 
+screen = pygame.display.set_mode((screen_width, screen_height))
+
 green = (0, 255, 0)  #color for the green text
 black = (0, 0, 0) #terminal's background color
 
@@ -27,7 +29,22 @@ intro_index = 0 #keeps track of what character to type next
 intro_last_type_time = pygame.time.get_ticks() #records when the last character was typed
 intro_typewriter_delay = 45 #interval between each letter (in milliseconds)
 
-intro_start_time = pygame.time.get_tiks()  #records when the intro started
+intro_start_time = pygame.time.get_ticks()  #records when the intro started
+
+#The loop below will keep the program running unless the user decides to close
+run = True
+
+while run:
+
+    for event in pygame.event.get(): #checks for key presses as 'events'
+        if event.type == pygame.QUIT: #checks if the 'event' is for closing the window
+
+            run = False #stops the loop
+            screen.fill(black)
+            pygame.display.update()
+
+pygame.quit()
+sys.exit()
 
 
 
