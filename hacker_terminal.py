@@ -25,7 +25,6 @@ base_font = pygame.font.SysFont("consolas", 27) #THe font that the program will 
 
 user_text = '' #This will contain the user's input
 
-
 prompt_text = "Please enter a question: " #Prompt that would ask the user to enter a question
 typed_prompt = '' #This is where the program will type the prompt, letter by letter.
 prompt_index = 0 #This is the index of the next character to type
@@ -59,7 +58,6 @@ while run:
         current_time = pygame.time.get_ticks() #Fetches the time elpased since the program initiates
         elapsed_time = current_time - intro_start_time #Calculates how much time has passed since the intro seqquence started
 
-        
         current_intro = intro_texts[intro_stage] #gets the current string to be typed on the screen
 
         if intro_index < len(current_intro) and current_time - intro_last_type_time > intro_typewriter_delay:
@@ -149,7 +147,7 @@ while run:
                 elif input_stage == "answer":
                     quiz_data["answer"] = user_text.upper() #sets user_text to uppercase
 
-                    with open(r"C:\Users\renza\OneDrive\Documents\School\College\2nd Semester\Object Oriented Programming\Programs\python_quiz_maker\quiz.txt", "a") as file: #opens the file in append mode where the data will be saved at.
+                    with open(r"quiz.txt", "a") as file: #opens the file in append mode where the data will be saved at.
                         file.write("Question: " + quiz_data["question"] + "\n") #This will write the question to the file
                         for key in ["A", "B", "C", "D"]: #This will iterate through each of the choices
                             file.write(f"{key}. {quiz_data['choices'][key]}\n") #Formats the choice
@@ -200,8 +198,6 @@ while run:
         typed_prompt += prompt_text[prompt_index] #This adds the next character to the display
         prompt_index += 1 #After having added the last character, this moves onto the next
         last_type_time = current_time #updates the current_time variable
-
-
 
     typed_surface = base_font.render(typed_prompt, True, ('green')) #this renders the text Green
     screen.blit(typed_surface, (100, 250)) #This assigns x and y coordinates to the prompt; placing it right above the input line
