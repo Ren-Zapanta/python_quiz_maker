@@ -1,0 +1,7 @@
+Question: What is a gundam
+A. a toy
+B. a mecha
+C. a man
+D. a food
+Answer: B 
+
