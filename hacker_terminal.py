@@ -1,4 +1,5 @@
 import pygame ##mport the pygame library to create the graphical interface
+import os
 pygame.init() #Initialize all the Pygame modules
 
 intro_stage = "init" #initializes the state of the intro sequence as "init"
@@ -47,6 +48,9 @@ quiz_data = {
     "choices": {"A": "", "B": "", "C": "", "D": ""},
     "answer": ""
 }
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  #gets the folder at which this file is saved in
+file_path = os.path.join(script_dir, "quiz.txt")   #MAkes the full path to the "quiz.txt" file
 
 while run:
 
@@ -147,7 +151,7 @@ while run:
                 elif input_stage == "answer":
                     quiz_data["answer"] = user_text.upper() #sets user_text to uppercase
 
-                    with open(r"quiz.txt", "a") as file: #opens the file in append mode where the data will be saved at.
+                    with open(file_path, "a") as file: #opens the file in append mode where the data will be saved at.
                         file.write("Question: " + quiz_data["question"] + "\n") #This will write the question to the file
                         for key in ["A", "B", "C", "D"]: #This will iterate through each of the choices
                             file.write(f"{key}. {quiz_data['choices'][key]}\n") #Formats the choice

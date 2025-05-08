@@ -40,3 +40,10 @@ C. none
 D. none  din
 Answer: D
 
+Question: what is a hotdog
+A. a food
+B. a toy
+C. a man
+D. a car
+Answer: A
+
