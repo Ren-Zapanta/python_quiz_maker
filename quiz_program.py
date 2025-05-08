@@ -61,7 +61,11 @@ while run:
                     intro_start_time = now #resets the ti mer
 
     elif intro_stage == "waiting_key":
-        typed_intro_text = intro_text["waiting_key"] #Initializes the corresponding message for this phase of the intro
+        if now - intro_last_type_time > intro_typewriter_delay:
+            if intro_index < len(intro_text["waiting_key"]):
+                typed_intro_text += intro_text["waiting_key"][intro_index]
+                intro_index += 1
+                intro_last_type_time = now
 
         for event in pygame.event.get(): #checks for any key presses
             if event.type == pygame.QUIT:
@@ -75,7 +79,3 @@ while run:
 
 pygame.quit()
 sys.exit()
-
-
-
-
