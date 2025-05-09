@@ -40,13 +40,13 @@ def load_questions(file_path):
     blocks = content.split("\n\n") #splits questions
     questions = [] #list to store eqach question block
 
-    for blovk in blocks:
+    for block in blocks:
         lines = block.strip().split("\n") #this splits each question block into individual lines
         if len(lines) >= 6: #ensures black has the complete question, its choices, and the correct answer
             question = lines[0] #questions are the first line
             choices = lines[1:5] #Next 4 lines are the choices
             answer = lines[5].strip().upper() #the last line is the correct answer
-            question.append({"question": question, "choices": choices, "answer": answer})
+            questions.append({"question": question, "choices": choices, "answer": answer})
         
     return questions
 
@@ -66,7 +66,7 @@ feedback_timer = 0 #records when th feedback was shown
 run = True
 
 while run:
-
+    screen.fill(black)
     now = pygame.time.get_ticks()
 
     for event in pygame.event.get(): #checks for key presses as 'events'
@@ -74,7 +74,13 @@ while run:
 
             run = False #stops the loop
             screen.fill(black)
-            pygame.display.update()
+            pygame.display.flip()
+
+        elif intro_stage == "waiting_key" and event.type == pygame.KEYDOWN:
+            intro_stage = "quiz"
+            typed_intro_text = ""
+            intro_index = 0
+            intro_start_time = pygame.time.get_ticks()
 
     if intro_stage == "init": #Handles the intro anmiation
         if now - intro_last_type_time > intro_typewriter_delay: #Checks if enough time has passed to show the next letter
@@ -109,24 +115,44 @@ while run:
                 typed_intro_text += intro_text["waiting_key"][intro_index]
                 intro_index += 1
                 intro_last_type_time = now
-
-        for event in pygame.event.get(): #checks for any key presses
-            if event.type == pygame.QUIT:
-                run = False #terminates the program if the window is closed
-            elif event.type == pygame.KEYDOWN:
-                intro_stage = "quiz" 
-                typed_intro_text = "" 
-                intro_index = 0 
-                intro_start_time = pygame.time.get_ticks()
-
-   
+        
+    elif intro_stage == "quiz":
+        question_data = questions[current_question_index] #fetches the current questions data
+        screen.blit(base_font.render(question_data["question"], True, green), (100, 100)) #displays thequestion
 
 
+        for i, choice in enumerate(question_data["choices"]): #displays the 4 choices
+            screen.blit(base_font.render(choice, True, green), (120, 160 + i * 40))
+
+        if feedback: #tells the user if they are either correct or incorrect
+            screen.blit(base_font.render(feedback, True, green), (100, 350))
+
+            if pygame.time.get_ticks() - feedback_timer > 2000:
+                feedback = "" #resets the feedback variable
+                current_question_index += 1 #proceeds with the next question
+                user_answer = "" #resets the user answer
+
+                if current_question_index >= len(questions):
+                    intro_stage = "end"
 
 
-    screen.fill(black)
-    screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the screen
-    pygame.display.update()
+
+    if intro_stage != "quiz":
+        screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the terminal
+    else:
+        #displays the question
+        question_data = questions[current_question_index] #retrieves the question's data from the questions list above
+        screen.blit(base_font.render(question_data["question"], True, green), (100, 100))
+
+        #displays the choices on the terminal
+        for i, choice in enumerate(question_data["choices"]):
+            screen.blit(base_font.render(choice, True, green), (120, 160 + i * 40))
+
+        #lets the user know if they are correct or not
+        if feedback:
+            screen.blit(base_font.render(feedback, True, green), (100, 350))
+
+    pygame.display.flip() #updates the display for the latest changes
             
 
 
