@@ -73,13 +73,17 @@ feedback = ""  #stores whether the answer inputed is correct or not
 feedback_timer = 0 #records when th feedback was shown
 
 
-#for animating question text
+#animation trackers for the texts to be displayed on the terminal
 typed_q = ""
 typed_q_index = 0
 typed_q_time = pygame.time.get_ticks()
 typed_choices = ["", "", "", ""]
 typed_choice_index = [0, 0, 0, 0]
 typed_choice_time = [pygame.time.get_ticks()] * 4
+typed_feedback = ""  # stores animated feedback text
+typed_feedback_index = 0
+typed_feedback_time = pygame.time.get_ticks()
+
 q_typing_delay = 30  #interval between letters
 
 
@@ -136,7 +140,7 @@ while run:
                 intro_index += 1
                 intro_last_type_time = now
             else:
-                if now - intro_start_time > 4000:
+                if now - intro_start_time > 4500:
                     intro_stage = "waiting_key" 
                     typed_intro_text = "" 
                     intro_index = 0 
@@ -162,10 +166,18 @@ while run:
                 
 
         if feedback: #tells the user if they are either correct or incorrect
-            screen.blit(base_font.render(feedback, True, green), (100, 500))
+            typed_feedback, typed_feedback_index, typed_feedback_time = typewriter(
+                feedback, typed_feedback, typed_feedback_index, typed_feedback_time, q_typing_delay
+            )
+
+            screen.blit(base_font.render(typed_feedback, True, green), (100, 500))
 
             if pygame.time.get_ticks() - feedback_timer > 2000:
                 feedback = "" #resets the feedback variable
+                typed_feedback = ""
+                typed_feedback_index = 0 
+                typed_feedback_time = pygame.time.get_ticks()
+
                 current_question_index += 1 #proceeds with the next question
                 user_answer = "" #resets the user answer
                 typed_q = ""  # clear previous typed question
