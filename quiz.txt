@@ -5,3 +5,17 @@ C. a man
 D. a food
 Answer: B 
 
+Question: which one is a food?
+A. pizza
+B. gundam
+C. sippers
+D. foot
+Answer: A
+
+Question: who is taylor swift
+A. singer
+B. chef
+C. engineer
+D. teacher
+Answer: A
+

@@ -1,9 +1,22 @@
+
 import pygame
 import sys
+import os
 import time
 import random
 
+def typewriter(text, current, index, last_time, delay):
+    now = pygame.time.get_ticks()  # Get current time
+    if index < len(text) and now - last_time > delay:
+        current += text[index]  # Add next character
+        index += 1
+        last_time = now
+    return current, index, last_time
+
 pygame.init() #Initializes Pygame modules
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  #gets the folder at which this file is saved in
+file_path = os.path.join(script_dir, "quiz.txt")   #MAkes the full path to the "quiz.txt" file
 
 base_font = pygame.font.SysFont("consolas", 27) #THe font that the program will be using, along with its size.
 
@@ -21,7 +34,7 @@ intro_stage = "init" #keeps track of which phase in the intro sequence is in
 
 intro_text = {
     "init": "System starting, please wait...", #First intro stage 
-    "quiz_init": "Quiz initialized.",#Second intro stage
+    "quiz_init": "This quiz will determine if you get to live or not.",#Second intro stage
     "waiting_key": "Press any key to continue." #Third intro stage
 
 }
@@ -45,12 +58,13 @@ def load_questions(file_path):
         if len(lines) >= 6: #ensures black has the complete question, its choices, and the correct answer
             question = lines[0] #questions are the first line
             choices = lines[1:5] #Next 4 lines are the choices
-            answer = lines[5].strip().upper() #the last line is the correct answer
+            answer_line = lines[5].strip().upper() #the last line is the correct answer
+            answer = answer_line[-1]
             questions.append({"question": question, "choices": choices, "answer": answer})
         
     return questions
 
-questions = load_questions("quiz.txt") #Loads the question from the text file
+questions = load_questions(file_path) #Loads the question from the text file
 random.shuffle(questions) #Randomizes the questions 
 
 current_question_index = 0 #Keeps track of which questions the user is answering
@@ -59,7 +73,14 @@ feedback = ""  #stores whether the answer inputed is correct or not
 feedback_timer = 0 #records when th feedback was shown
 
 
-
+#for animating question text
+typed_q = ""
+typed_q_index = 0
+typed_q_time = pygame.time.get_ticks()
+typed_choices = ["", "", "", ""]
+typed_choice_index = [0, 0, 0, 0]
+typed_choice_time = [pygame.time.get_ticks()] * 4
+q_typing_delay = 30  #interval between letters
 
 
 #The loop below will keep the program running unless the user decides to close
@@ -115,7 +136,7 @@ while run:
                 intro_index += 1
                 intro_last_type_time = now
             else:
-                if now - intro_start_time > 2000:
+                if now - intro_start_time > 4000:
                     intro_stage = "waiting_key" 
                     typed_intro_text = "" 
                     intro_index = 0 
@@ -130,19 +151,28 @@ while run:
         
     elif intro_stage == "quiz":
         question_data = questions[current_question_index] #fetches the current questions data
-        screen.blit(base_font.render(question_data["question"], True, green), (100, 260)) #displays thequestion
+        typed_q, typed_q_index, typed_q_time = typewriter( question_data["question"], typed_q, typed_q_index, typed_q_time, q_typing_delay)
+        screen.blit(base_font.render(typed_q, True, green), (100, 260))
 
-
-        for i, choice in enumerate(question_data["choices"]): #displays the 4 choices
-            screen.blit(base_font.render(choice, True, green), (120, 300 + i * 40))
+        for i, choice in enumerate(question_data["choices"]):
+            typed_choices[i], typed_choice_index[i], typed_choice_time[i] = typewriter(
+                choice, typed_choices[i], typed_choice_index[i], typed_choice_time[i], q_typing_delay
+            )
+            screen.blit(base_font.render(typed_choices[i], True, green), (120, 300 + i * 40))
+                
 
         if feedback: #tells the user if they are either correct or incorrect
-            screen.blit(base_font.render(feedback, True, green), (100, 350))
+            screen.blit(base_font.render(feedback, True, green), (100, 500))
 
             if pygame.time.get_ticks() - feedback_timer > 2000:
                 feedback = "" #resets the feedback variable
                 current_question_index += 1 #proceeds with the next question
                 user_answer = "" #resets the user answer
+                typed_q = ""  # clear previous typed question
+                typed_q_index = 0  # reset character index for typing
+                typed_choices = ["", "", "", ""]
+                typed_choice_index = [0, 0, 0, 0]
+                typed_choice_time = [pygame.time.get_ticks()] * 4
 
                 if current_question_index >= len(questions):
                     intro_stage = "end"
@@ -151,18 +181,7 @@ while run:
 
     if intro_stage != "quiz":
         screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the terminal
-    else:
-        #displays the question
-        question_data = questions[current_question_index] #retrieves the question's data from the questions list above
-        screen.blit(base_font.render(question_data["question"], True, green), (100, 260))
-
-        #displays the choices on the terminal
-        for i, choice in enumerate(question_data["choices"]):
-            screen.blit(base_font.render(choice, True, green), (120, 300 + i * 40))
-
-        #lets the user know if they are correct or not
-        if feedback:
-            screen.blit(base_font.render(feedback, True, green), (100, 350))
+    
 
     pygame.display.flip() #updates the display for the latest changes
             
