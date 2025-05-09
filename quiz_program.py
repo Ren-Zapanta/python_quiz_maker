@@ -77,10 +77,22 @@ while run:
             pygame.display.flip()
 
         elif intro_stage == "waiting_key" and event.type == pygame.KEYDOWN:
-            intro_stage = "quiz"
-            typed_intro_text = ""
-            intro_index = 0
-            intro_start_time = pygame.time.get_ticks()
+                intro_stage = "quiz"
+                typed_intro_text = ""
+                intro_index = 0
+                intro_start_time = pygame.time.get_ticks()
+
+        elif intro_stage == "quiz" and event.type == pygame.KEYDOWN:
+            key = event.unicode.upper() #Converts the pressed key into upper case
+            if key in ["A", "B", "C", "D"]: #only accepts thses characters
+                user_answer = key #saves the user's input
+                correct_answer = questions[current_question_index]["answer"] #gets the correct answer
+                if user_answer == correct_answer: #prints corresponding statement if the user is either correct or not
+                    feedback = "You're correct."
+                else:
+                    feedback = "You are wrong."
+                feedback_timer = pygame.time.get_ticks()
+
 
     if intro_stage == "init": #Handles the intro anmiation
         if now - intro_last_type_time > intro_typewriter_delay: #Checks if enough time has passed to show the next letter
@@ -118,11 +130,11 @@ while run:
         
     elif intro_stage == "quiz":
         question_data = questions[current_question_index] #fetches the current questions data
-        screen.blit(base_font.render(question_data["question"], True, green), (100, 100)) #displays thequestion
+        screen.blit(base_font.render(question_data["question"], True, green), (100, 260)) #displays thequestion
 
 
         for i, choice in enumerate(question_data["choices"]): #displays the 4 choices
-            screen.blit(base_font.render(choice, True, green), (120, 160 + i * 40))
+            screen.blit(base_font.render(choice, True, green), (120, 300 + i * 40))
 
         if feedback: #tells the user if they are either correct or incorrect
             screen.blit(base_font.render(feedback, True, green), (100, 350))
@@ -142,11 +154,11 @@ while run:
     else:
         #displays the question
         question_data = questions[current_question_index] #retrieves the question's data from the questions list above
-        screen.blit(base_font.render(question_data["question"], True, green), (100, 100))
+        screen.blit(base_font.render(question_data["question"], True, green), (100, 260))
 
         #displays the choices on the terminal
         for i, choice in enumerate(question_data["choices"]):
-            screen.blit(base_font.render(choice, True, green), (120, 160 + i * 40))
+            screen.blit(base_font.render(choice, True, green), (120, 300 + i * 40))
 
         #lets the user know if they are correct or not
         if feedback:
