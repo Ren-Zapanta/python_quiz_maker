@@ -53,6 +53,7 @@ def load_questions(file_path):
     blocks = content.split("\n\n") #splits questions
     questions = [] #list to store eqach question block
 
+    #formatting of the contents of the text file
     for block in blocks:
         lines = block.strip().split("\n") #this splits each question block into individual lines
         if len(lines) >= 6: #ensures black has the complete question, its choices, and the correct answer
@@ -77,14 +78,21 @@ feedback_timer = 0 #records when th feedback was shown
 typed_q = ""
 typed_q_index = 0
 typed_q_time = pygame.time.get_ticks()
+
+#parameters for the choices animation
 typed_choices = ["", "", "", ""]
 typed_choice_index = [0, 0, 0, 0]
 typed_choice_time = [pygame.time.get_ticks()] * 4
+
+#parameters for the feedback animation
 typed_feedback = ""  # stores animated feedback text
 typed_feedback_index = 0
 typed_feedback_time = pygame.time.get_ticks()
 
 q_typing_delay = 30  #interval between letters
+
+score = 0 #keeps track of the score
+
 
 
 #The loop below will keep the program running unless the user decides to close
@@ -93,6 +101,7 @@ run = True
 while run:
     screen.fill(black)
     now = pygame.time.get_ticks()
+
 
     for event in pygame.event.get(): #checks for key presses as 'events'
         if event.type == pygame.QUIT: #checks if the 'event' is for closing the window
@@ -114,10 +123,10 @@ while run:
                 correct_answer = questions[current_question_index]["answer"] #gets the correct answer
                 if user_answer == correct_answer: #prints corresponding statement if the user is either correct or not
                     feedback = "You're correct."
+                    score += 1
                 else:
                     feedback = "You are wrong."
                 feedback_timer = pygame.time.get_ticks()
-
 
     if intro_stage == "init": #Handles the intro anmiation
         if now - intro_last_type_time > intro_typewriter_delay: #Checks if enough time has passed to show the next letter
@@ -164,7 +173,6 @@ while run:
             )
             screen.blit(base_font.render(typed_choices[i], True, green), (120, 300 + i * 40))
                 
-
         if feedback: #tells the user if they are either correct or incorrect
             typed_feedback, typed_feedback_index, typed_feedback_time = typewriter(
                 feedback, typed_feedback, typed_feedback_index, typed_feedback_time, q_typing_delay
@@ -190,14 +198,13 @@ while run:
                     intro_stage = "end"
 
 
-
     if intro_stage != "quiz":
         screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the terminal
     
-
+    if intro_stage == "end":
+        end_text = (f"Quiz completed. Your score: {score}/{len(questions)}")
+        screen.blit(base_font.render(end_text, True, green), (100, 600))
     pygame.display.flip() #updates the display for the latest changes
             
-
-
 pygame.quit()
 sys.exit()

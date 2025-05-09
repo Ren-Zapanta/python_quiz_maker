@@ -1,21 +1,7 @@
-Question: What is a gundam
-A. a toy
-B. a mecha
-C. a man
-D. a food
-Answer: B 
-
-Question: which one is a food?
-A. pizza
-B. gundam
-C. sippers
-D. foot
-Answer: A
-
-Question: who is taylor swift
-A. singer
-B. chef
-C. engineer
-D. teacher
-Answer: A
+Question: Bakit ang galing ni sir Danilo?
+A. Kasi he's just the goat
+B. Kasi napaka pogi niya 
+C. Kasi napaka lupet niya
+D. All of the above
+Answer: D
 
