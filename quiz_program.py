@@ -1,15 +1,17 @@
 
+#Imports all the necessary modules and libraries
 import pygame
 import sys
 import os
 import time
 import random
 
+#function of typewriter animation
 def typewriter(text, current, index, last_time, delay):
     now = pygame.time.get_ticks()  # Get current time
     if index < len(text) and now - last_time > delay:
-        current += text[index]  # Add next character
-        index += 1
+        current += text[index]  #Adds next character
+        index += 1 #moves to the next character
         last_time = now
     return current, index, last_time
 
@@ -23,21 +25,23 @@ base_font = pygame.font.SysFont("consolas", 27) #THe font that the program will 
 #Sets the window's dimensions
 screen_width = 1200
 screen_height = 720
-pygame.display.set_caption("Hacker Terminal") #name of the window
+pygame.display.set_caption("Quiz Program") #name of the window
 
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height)) #creates the window
 
 green = (0, 255, 0)  #color for the green text
 black = (0, 0, 0) #terminal's background color
 
 intro_stage = "init" #keeps track of which phase in the intro sequence is in
 
+#messages for each intro stage
 intro_text = {
     "init": "System starting, please wait...", #First intro stage 
     "quiz_init": "This quiz will determine if you get to live or not.",#Second intro stage
     "waiting_key": "Press any key to continue." #Third intro stage
 
 }
+
 #Handles the intro text animation
 typed_intro_text = "" #stores typed characters
 intro_index = 0 #keeps track of what character to type next
@@ -46,6 +50,7 @@ intro_typewriter_delay = 45 #interval between each letter (in milliseconds)
 
 intro_start_time = pygame.time.get_ticks()  #records when the intro started
 
+#function that loads the contents from the designated file
 def load_questions(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         content = file.read().strip() #Reads all texts in the given thext file
@@ -94,6 +99,8 @@ typed_score = ""
 typed_score_index = 0
 typed_score_time = pygame.time.get_ticks()
 
+end_start_time = 0 #records when the end screen starts
+
 q_typing_delay = 30  #interval between letters
 
 score = 0 #keeps track of the score
@@ -115,12 +122,14 @@ while run:
             screen.fill(black)
             pygame.display.flip()
 
+        #waiting key stage
         elif intro_stage == "waiting_key" and event.type == pygame.KEYDOWN:
                 intro_stage = "quiz"
                 typed_intro_text = ""
                 intro_index = 0
                 intro_start_time = pygame.time.get_ticks()
 
+        #quiz stage
         elif intro_stage == "quiz" and event.type == pygame.KEYDOWN:
             key = event.unicode.upper() #Converts the pressed key into upper case
             if key in ["A", "B", "C", "D"]: #only accepts thses characters
@@ -133,6 +142,7 @@ while run:
                     feedback = "You are wrong."
                 feedback_timer = pygame.time.get_ticks()
 
+    #Handles the different stages of the intro
     if intro_stage == "init": #Handles the intro anmiation
         if now - intro_last_type_time > intro_typewriter_delay: #Checks if enough time has passed to show the next letter
             if intro_index < len(intro_text["init"]):
@@ -169,15 +179,19 @@ while run:
         
     elif intro_stage == "quiz":
         question_data = questions[current_question_index] #fetches the current questions data
+
+        #animation for the question text
         typed_q, typed_q_index, typed_q_time = typewriter( question_data["question"], typed_q, typed_q_index, typed_q_time, q_typing_delay)
         screen.blit(base_font.render(typed_q, True, green), (100, 260))
 
+        #animates the choices of the given question
         for i, choice in enumerate(question_data["choices"]):
             typed_choices[i], typed_choice_index[i], typed_choice_time[i] = typewriter(
                 choice, typed_choices[i], typed_choice_index[i], typed_choice_time[i], q_typing_delay
             )
             screen.blit(base_font.render(typed_choices[i], True, green), (120, 300 + i * 40))
-                
+
+        #animation for the feedback message
         if feedback: #tells the user if they are either correct or incorrect
             typed_feedback, typed_feedback_index, typed_feedback_time = typewriter(
                 feedback, typed_feedback, typed_feedback_index, typed_feedback_time, q_typing_delay
@@ -185,8 +199,9 @@ while run:
 
             screen.blit(base_font.render(typed_feedback, True, green), (100, 500))
 
+            #waits for exactly 2 seconds before proceeding onto the next question
             if pygame.time.get_ticks() - feedback_timer > 2000:
-                feedback = "" #resets the feedback variable
+                feedback = "" 
                 typed_feedback = ""
                 typed_feedback_index = 0 
                 typed_feedback_time = pygame.time.get_ticks()
@@ -199,24 +214,38 @@ while run:
                 typed_choice_index = [0, 0, 0, 0]
                 typed_choice_time = [pygame.time.get_ticks()] * 4
 
+                #shows the score if all questions of the file have been exhaussted
                 if current_question_index >= len(questions):
-                    intro_stage = "end"
+                    intro_stage = "score"
                     final_score_text = (f"Quiz completed. Your score: {score}/{len(questions)}")
                     typed_score = ""
                     typed_score_index = 0
                     typed_score_time = pygame.time.get_ticks()
+                    end_start_time = 0
+
 
 
     if intro_stage != "quiz":
         screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the terminal
     
-    if intro_stage == "end":
+    if intro_stage == "score":
         typed_score, typed_score_index, typed_score_time = typewriter(
             final_score_text, typed_score, typed_score_index, typed_score_time, q_typing_delay
         )
         screen.blit(base_font.render(typed_score, True, green), (100, 600))
+
+        if typed_score_index == len(final_score_text):
+            if end_start_time == 0:
+                end_start_time = pygame.time.get_ticks()
+            elif pygame.time.get_ticks() - end_start_time > 3000:
+                intro_stage = "end"
+
+    #ends the main loop
+    if intro_stage == "end":
+            run = False
         
     pygame.display.flip() #updates the display for the latest changes
             
+#terminates the program
 pygame.quit()
 sys.exit()

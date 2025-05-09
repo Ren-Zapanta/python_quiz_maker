@@ -5,3 +5,10 @@ C. Kasi napaka lupet niya
 D. All of the above
 Answer: D
 
+Question: Bakit ka nagp-puyat?
+A. Nagr-relapse
+B. Hindi lang talaga makatulog
+C. Nagc-cram ng requirements
+D. Nagb-bebetime
+Answer: C
+
