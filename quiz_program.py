@@ -89,6 +89,11 @@ typed_feedback = ""  # stores animated feedback text
 typed_feedback_index = 0
 typed_feedback_time = pygame.time.get_ticks()
 
+#parameters for the score text animation
+typed_score = ""
+typed_score_index = 0
+typed_score_time = pygame.time.get_ticks()
+
 q_typing_delay = 30  #interval between letters
 
 score = 0 #keeps track of the score
@@ -196,14 +201,21 @@ while run:
 
                 if current_question_index >= len(questions):
                     intro_stage = "end"
+                    final_score_text = (f"Quiz completed. Your score: {score}/{len(questions)}")
+                    typed_score = ""
+                    typed_score_index = 0
+                    typed_score_time = pygame.time.get_ticks()
 
 
     if intro_stage != "quiz":
         screen.blit(base_font.render(typed_intro_text, True, green), (125, screen_height // 2)) #renders the text on the terminal
     
     if intro_stage == "end":
-        end_text = (f"Quiz completed. Your score: {score}/{len(questions)}")
-        screen.blit(base_font.render(end_text, True, green), (100, 600))
+        typed_score, typed_score_index, typed_score_time = typewriter(
+            final_score_text, typed_score, typed_score_index, typed_score_time, q_typing_delay
+        )
+        screen.blit(base_font.render(typed_score, True, green), (100, 600))
+        
     pygame.display.flip() #updates the display for the latest changes
             
 pygame.quit()
